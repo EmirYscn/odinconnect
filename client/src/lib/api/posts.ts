@@ -1,8 +1,17 @@
 import { api } from "./axios";
+import type { Post } from "@shared/types";
 
-type Post = { userId: number; id: number; title: string; body: string };
+export const getFeedPosts = async (): Promise<Post[]> => {
+  const response = await api.get("/posts/feed");
+  return response.data;
+};
 
-export const getPosts = async (): Promise<Post[]> => {
-  const response = await api.get("/posts?limit=10");
+export const getFollowingPosts = async (): Promise<Post[]> => {
+  const response = await api.get("/posts/following");
+  return response.data;
+};
+
+export const getPost = async (id: string): Promise<Post> => {
+  const response = await api.get(`/posts/${id}`);
   return response.data;
 };
