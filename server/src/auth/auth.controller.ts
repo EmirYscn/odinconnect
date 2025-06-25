@@ -6,7 +6,6 @@ import {
   HttpStatus,
   Post,
   Req,
-  Res,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -14,13 +13,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { User as UserType } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../common/decorators/user.decorator';
 import { UsersInterceptor } from 'src/common/interceptors/users.interceptor';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { RefreshTokenDto } from './dtos/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -32,18 +32,14 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalGuard)
-  async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async login(@Req() req: Request) {
     const user = req.user as UserType;
-    const { access_token, user: userData } = await this.authService.login(user);
-
-    res.cookie('jwt', access_token, {
-      httpOnly: true,
-      secure: this.ConfigService.get('NODE_ENV') === 'production',
-      sameSite: 'none',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-
-    return userData;
+    const {
+      accessToken,
+      refreshToken,
+      user: userData,
+    } = await this.authService.login(user);
+    return { userData, accessToken, refreshToken };
   }
 
   @Post('signup')
@@ -56,6 +52,12 @@ export class AuthController {
   @Auth()
   @UseInterceptors(UsersInterceptor)
   status(@User() user: UserType) {
-    return user;
+    return { user };
+  }
+
+  @Post('refresh-token')
+  @HttpCode(HttpStatus.OK)
+  public async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    return await this.authService.refreshToken(refreshTokenDto);
   }
 }

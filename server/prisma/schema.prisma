@@ -27,8 +27,8 @@ model User {
   resetPasswordToken   String?   @unique // Token for password reset
   resetPasswordExpires DateTime? // Expiration date for the token
 
-  posts        Post[] // One-to-many relationship with Post
-  
+  posts Post[] // One-to-many relationship with Post
+
   // Relations
   following    UserFollowing[] @relation("Following")
   followers    UserFollowing[] @relation("Followers")
@@ -39,23 +39,23 @@ model User {
 }
 
 model UserFollowing {
-  id       String  @id @default(uuid())
-  followerId   String
-  followingId  String
+  id          String @id @default(uuid())
+  followerId  String
+  followingId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  follower   User @relation("Following", fields: [followerId], references: [id])
-  following  User @relation("Followers", fields: [followingId], references: [id])
+  follower  User @relation("Following", fields: [followerId], references: [id])
+  following User @relation("Followers", fields: [followingId], references: [id])
 
   @@unique([followerId, followingId])
 }
 
 model UserBlocked {
-  id       String  @id @default(uuid())
-  userId         String
-  blockedUserId  String
+  id            String @id @default(uuid())
+  userId        String
+  blockedUserId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -67,7 +67,7 @@ model UserBlocked {
 }
 
 model UserSettings {
-  id       String  @id @default(uuid())
+  id String @id @default(uuid())
 
   notifications Boolean @default(true) // Whether the user wants notifications
 
@@ -79,7 +79,7 @@ model UserSettings {
 }
 
 model Post {
-  id       String  @id @default(uuid())
+  id      String @id @default(uuid())
   content String
 
   createdAt DateTime  @default(now())
@@ -91,17 +91,17 @@ model Post {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  media Media[] // One-to-many relationship with Media
+  medias Media[] // One-to-many relationship with Media
 }
 
 model Media {
-  id       String  @id @default(uuid())
+  id   String     @id @default(uuid())
   url  String // Direct URL to the media file
   type MEDIA_TYPE // Type of media (e.g., image, video, audio)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  post   Post @relation(fields: [postId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
   postId String
 }

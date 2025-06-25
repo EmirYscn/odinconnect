@@ -46,7 +46,7 @@ function GoogleButton() {
         flex items-center justify-center gap-2
         w-full h-10 px-4 py-2 cursor-pointer
         text-sm font-medium text-[#3c4043]
-        bg-white border border-[#dadce0] rounded
+        bg-white/40 rounded
         transition duration-200
         hover:bg-[#f8f9fa] hover:shadow-sm
         active:bg-[#f1f3f4]

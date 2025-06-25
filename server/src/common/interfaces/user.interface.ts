@@ -1,5 +1,5 @@
 export interface ActiveUserType {
-  id: number;
+  sub: number;
   email: string;
   username: string;
 }

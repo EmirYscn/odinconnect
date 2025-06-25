@@ -22,7 +22,9 @@ export interface Post {
 
   published: boolean;
   readonly userId: string;
-  media: Media[];
+
+  user: User;
+  medias: Media[];
 }
 
 export interface UserSettings {

@@ -28,7 +28,7 @@ export class PostsController {
   }
 
   @Get('feed')
-  // @Auth()
+  @Auth()
   getFeedPosts(@Query('cursor', new DefaultValuePipe(0)) cursor: number) {
     // console.log('Cursor:', cursor);
     // if (!cursor) {
@@ -38,7 +38,7 @@ export class PostsController {
   }
 
   @Get('following')
-  // @Auth()
+  @Auth()
   getFollowingPosts(@User() user: UserType) {
     return this.postsService.getFollowingPosts(user.id);
   }

@@ -34,7 +34,7 @@ function GitHubButton() {
         flex items-center justify-center gap-2
         w-full h-10 px-4 py-2
         text-sm font-medium text-white
-        bg-[#24292e] border border-[#1b1f23] rounded
+        bg-[#24292e]/80 rounded
         font-['Roboto'] cursor-pointer 
         transition duration-200
         hover:bg-[#2c3338]

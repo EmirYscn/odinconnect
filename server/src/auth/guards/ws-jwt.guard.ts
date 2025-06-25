@@ -32,13 +32,12 @@ export class WsJwtGuard implements CanActivate {
     jwtService: JwtService,
     usersService: UsersService,
   ) {
-    const { authorization } = socket.handshake.headers;
-    const token = authorization?.split(' ')[1];
-    if (!token) {
+    const accessToken = socket.handshake.auth.accessToken as string;
+    if (!accessToken) {
       throw new WsException('Invalid credentials.');
     }
     try {
-      const payload = await jwtService.verifyAsync<JwtObject>(token);
+      const payload = await jwtService.verifyAsync<JwtObject>(accessToken);
       const user = await usersService.getUserById(payload.sub);
       if (!user) {
         throw new WsException('User not found.');

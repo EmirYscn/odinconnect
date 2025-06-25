@@ -1,13 +1,23 @@
 "use client";
 import { env } from "@/lib/env";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "@shared/types/types";
 import { createContext, useContext, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 
-const SocketContext = createContext<Socket | null>(null);
+const SocketContext = createContext<Socket<
+  ServerToClientEvents,
+  ClientToServerEvents
+> | null>(null);
 
-let socket: Socket | null = null;
+export let socket: Socket<ServerToClientEvents, ClientToServerEvents> | null =
+  null;
 if (typeof window !== "undefined" && !socket) {
-  socket = io(env.socketUrl);
+  socket = io(env.socketUrl, {
+    autoConnect: false,
+  });
 }
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
@@ -29,3 +39,21 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
 export function useSocket() {
   return useContext(SocketContext);
 }
+
+export const connectSocket = () => {
+  const token = localStorage.getItem("accessToken");
+  if (!socket) {
+    console.error("Socket is not initialized");
+    return;
+  }
+  if (token) {
+    socket.auth = { accessToken: token };
+  }
+  socket?.connect();
+};
+
+export const disconnectSocket = () => {
+  if (socket) {
+    socket.disconnect();
+  }
+};

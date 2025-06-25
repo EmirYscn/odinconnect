@@ -1,30 +1,24 @@
+import { login as loginApi } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export const useLogin = () => {
-  const {} = useMutation({
+  const router = useRouter();
+  const { mutate: login, isPending } = useMutation({
     mutationFn: async ({
       email,
       password,
     }: {
       email: string;
       password: string;
-    }) => {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      return response.json();
+    }) => loginApi(email, password),
+    onSuccess: () => {
+      router.push("/home");
     },
-    onError: (error) => {
-      console.error("Login error:", error);
+    onError: (err) => {
+      toast.error(err.message);
     },
   });
+  return { login, isPending };
 };

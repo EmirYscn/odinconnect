@@ -1,20 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly eventsGateway: EventsGateway,
+    private readonly usersService: UsersService, // Assuming you have a UsersService for user-related operations
   ) {}
 
   async createPost(userId: string, data: Prisma.PostCreateWithoutUserInput) {
+    // Validate user exists
+    const user = await this.usersService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
     const createdPost = await this.prisma.post.create({
       data: {
         ...data,
-        userId,
+        userId: user.id, // Ensure the post is associated with the correct user
       },
     });
 
@@ -36,7 +43,7 @@ export class PostsService {
             avatar: true,
           },
         },
-        media: {
+        medias: {
           select: {
             id: true,
             url: true,
@@ -79,7 +86,7 @@ export class PostsService {
             avatar: true,
           },
         },
-        media: {
+        medias: {
           select: {
             id: true,
             url: true,
@@ -104,7 +111,7 @@ export class PostsService {
             avatar: true,
           },
         },
-        media: {
+        medias: {
           select: {
             id: true,
             url: true,

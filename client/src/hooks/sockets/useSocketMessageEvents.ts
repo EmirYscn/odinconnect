@@ -15,11 +15,11 @@ export function useSocketMessageEvents() {
     };
 
     socket.on("connect", handleConnect);
-    socket.on("message", handleMessage);
+    socket.on("message:received", handleMessage);
 
     return () => {
       socket.off("connect", handleConnect);
-      socket.off("message", handleMessage);
+      socket.off("message:received", handleMessage);
     };
   }, [socket]);
 }

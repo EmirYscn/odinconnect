@@ -5,6 +5,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import FormRowVertical from "@/components/FormRowVertical";
 import SpinnerMini from "@/components/SpinnerMini";
+import Link from "next/link";
 
 function SignupForm() {
   // const {
@@ -97,7 +98,6 @@ function SignupForm() {
           // })}
         />
       </FormRowVertical>
-
       <FormRowVertical>
         <Button type="submit" size="medium" variation="login">
           {true ? "Sign up" : <SpinnerMini />}

@@ -94,6 +94,24 @@
   --image-opacity: 90%;
 }
 
+/* * {
+  @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent;
+} */
+
+html body {
+  background-image: url("/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  @apply subpixel-antialiased;
+}
+
+html.dark-mode body {
+  background-color: rgba(0, 0, 0, 0.2);
+  background-blend-mode: darken;
+}
+
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
