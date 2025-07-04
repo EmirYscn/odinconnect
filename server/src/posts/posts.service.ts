@@ -41,6 +41,7 @@ export class PostsService {
             id: true,
             username: true,
             avatar: true,
+            profile: true,
           },
         },
         medias: {
@@ -84,6 +85,7 @@ export class PostsService {
             id: true,
             username: true,
             avatar: true,
+            profile: true,
           },
         },
         medias: {
@@ -109,6 +111,7 @@ export class PostsService {
             id: true,
             username: true,
             avatar: true,
+            profile: true,
           },
         },
         medias: {

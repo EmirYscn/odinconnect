@@ -17,10 +17,10 @@ import { Request } from 'express';
 import { User as UserType } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../common/decorators/user.decorator';
-import { UsersInterceptor } from 'src/common/interceptors/users.interceptor';
 import { Auth } from 'src/common/decorators/auth.decorator';
 import { CreateUserDto } from 'src/users/dtos/create-user.dto';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
+import { UsersInterceptor } from 'src/common/interceptors/users.interceptor';
 
 @Controller('auth')
 export class AuthController {

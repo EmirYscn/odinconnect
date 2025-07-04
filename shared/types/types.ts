@@ -35,6 +35,18 @@ export interface UserSettings {
   readonly userId: string;
 }
 
+export interface Profile {
+  readonly id: string;
+  bio: string; // User's bio
+  location: string; // User's location
+  website: string; // User's personal website or blog
+
+  readonly createdAt: string;
+  readonly updatedAt: string;
+
+  user: User;
+}
+
 export interface User {
   readonly id: string;
   email: string;
@@ -49,6 +61,7 @@ export interface User {
   readonly resetPasswordExpires?: string | null;
 
   posts: Post[];
+  profile?: Profile | null;
   following: UserFollowing[];
   followers: UserFollowing[];
   blockedUsers: UserBlocked[];

@@ -43,7 +43,7 @@ type ToggleProps = {
   className?: string;
   position?: "above" | "below";
   toggleElement?: "button" | "profile";
-  elementRef?: React.RefObject<HTMLDivElement>;
+  elementRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 function Toggle({
@@ -167,7 +167,7 @@ function Button({
     <li>
       <button
         onClick={handleClick}
-        className={`text-[var(--color-grey-800)] w-full text-left bg-none border-none px-7 py-4 text-sm flex items-center gap-4 hover:bg-[var(--color-grey-100)]/50 [&_svg]:w-[1rem] [&_svg]:h-[1rem] rounded-xl ${
+        className={`text-[var(--color-grey-800)] w-full text-left bg-none border-none px-7 py-4 text-sm flex items-center gap-4 hover:bg-[var(--color-grey-100)]/50 [&_svg]:w-[1rem] [&_svg]:h-[1rem] rounded-xl cursor-pointer ${
           isSelected ? "bg-[var(--color-brand-900)]" : ""
         } ${className}`}
       >

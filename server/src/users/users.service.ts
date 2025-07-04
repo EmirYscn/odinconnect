@@ -37,6 +37,7 @@ export class UsersService {
         ...data,
         password: hashedPassword,
         userSettings: { create: { notifications: true } },
+        profile: { create: {} }, // Create an empty profile
       },
     });
   }

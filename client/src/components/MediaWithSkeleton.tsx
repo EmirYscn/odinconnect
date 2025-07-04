@@ -20,7 +20,10 @@ export function MediaWithSkeleton({ src }: { src: string }) {
 
       <Modal>
         <Modal.Open opens="preview">
-          <div className="relative w-full h-full cursor-pointer aspect-video">
+          <div
+            className="relative w-full h-full cursor-pointer aspect-video"
+            onClick={(e) => e.stopPropagation()}
+          >
             <Image
               src={src}
               alt="Chat media"

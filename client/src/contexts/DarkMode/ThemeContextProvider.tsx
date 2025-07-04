@@ -14,12 +14,13 @@ function ThemeContextProvider({ children }: ThemeContextContextProviderProps) {
     const savedTheme = localStorage.getItem("isDarkMode");
     if (savedTheme !== null) {
       setIsDarkMode(JSON.parse(savedTheme));
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDarkMode(prefersDark);
     }
+    // else {
+    //   const prefersDark = window.matchMedia(
+    //     "(prefers-color-scheme: dark)"
+    //   ).matches;
+    //   setIsDarkMode(prefersDark);
+    // }
   }, []);
 
   useEffect(() => {

@@ -19,6 +19,8 @@ function omitPassword(user: User) {
   return rest;
 }
 
+type Data = User[] | User | { user: User };
+
 @Injectable()
 export class UsersInterceptor implements NestInterceptor {
   intercept(
@@ -26,11 +28,22 @@ export class UsersInterceptor implements NestInterceptor {
     next: CallHandler<User[] | User>,
   ): Observable<any> | Promise<Observable<any>> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: Data) => {
         if (Array.isArray(data)) {
           return data.map(omitPassword);
         }
-        return omitPassword(data);
+        // If data is a single user
+        if (data && typeof data === 'object') {
+          // Omit password if user is nested
+          if ('user' in data && typeof data.user === 'object') {
+            return { ...data, user: omitPassword(data.user) };
+          }
+          // Omit password if user is top-level
+          if ('password' in data) {
+            return omitPassword(data);
+          }
+        }
+        return data;
       }),
     );
   }

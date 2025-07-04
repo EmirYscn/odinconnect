@@ -27,15 +27,7 @@ function LoginForm() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email || !password) return;
-    login(
-      { email, password },
-      {
-        onSuccess: () => {
-          setEmail("");
-          setPassword("");
-        },
-      }
-    );
+    login({ email, password });
   }
 
   return (

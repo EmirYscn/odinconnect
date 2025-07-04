@@ -10,7 +10,6 @@ import { MdDarkMode, MdOutlineMail } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import ProfileImage from "./ProfileImage";
 import { BsThreeDots } from "react-icons/bs";
-import Modal from "./Modal";
 import Menus from "./Menus";
 import { useRef } from "react";
 import { IoIosLogOut } from "react-icons/io";
