@@ -23,7 +23,7 @@ function GitHubButton() {
   const handleGitHubLogin = () => {
     const currentUrl = window.location.origin;
     const redirectUrl = encodeURIComponent(currentUrl);
-    window.location.href = `${API_BASE_URL}/api/v1/auth/github/?redirect=${redirectUrl}`;
+    window.location.href = `${API_BASE_URL}/auth/github/login/?redirect=${redirectUrl}`;
   };
 
   return (

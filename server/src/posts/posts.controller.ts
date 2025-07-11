@@ -27,20 +27,28 @@ export class PostsController {
     return this.postsService.createPost(user.id, createPostDto);
   }
 
-  @Get('feed')
+  @Get('foryou')
   @Auth()
-  getFeedPosts(@Query('cursor', new DefaultValuePipe(0)) cursor: number) {
+  getForYouPosts(@Query('cursor', new DefaultValuePipe(0)) cursor: number) {
     // console.log('Cursor:', cursor);
     // if (!cursor) {
     //   throw new BadRequestException('Cursor is required');
     // }
-    return this.postsService.getFeedPosts();
+    return this.postsService.getForYouPosts();
   }
 
   @Get('following')
   @Auth()
   getFollowingPosts(@User() user: UserType) {
     return this.postsService.getFollowingPosts(user.id);
+  }
+
+  @Get('user/:id')
+  getUserPosts(@Param('id') id: string) {
+    if (!id) {
+      throw new BadRequestException('User ID is required');
+    }
+    return this.postsService.getUserPosts(id);
   }
 
   @Get(':id')

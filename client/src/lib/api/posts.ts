@@ -1,13 +1,18 @@
 import { api } from "./axios";
 import type { Post } from "@shared/types/types";
 
-export const getFeedPosts = async (): Promise<Post[]> => {
-  const response = await api.get("/posts/feed");
+export const getForYouPosts = async (): Promise<Post[]> => {
+  const response = await api.get("/posts/foryou");
   return response.data;
 };
 
 export const getFollowingPosts = async (): Promise<Post[]> => {
   const response = await api.get("/posts/following");
+  return response.data;
+};
+
+export const getUserPosts = async (userId: string): Promise<Post[]> => {
+  const response = await api.get(`/posts/user/${userId}`);
   return response.data;
 };
 

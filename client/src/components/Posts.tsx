@@ -1,11 +1,14 @@
-import { useFeedPosts } from "@/hooks/useFeedPosts";
 import Post from "./Post";
 import PostSkeleton from "./PostSkeleton";
 import { HiOutlineInbox } from "react-icons/hi2";
+import { Post as PostType } from "@shared/types/types";
 
-function Posts() {
-  const { feedPosts, isLoading } = useFeedPosts();
+type PostsProps = {
+  posts: PostType[] | undefined;
+  isLoading?: boolean;
+};
 
+function Posts({ posts, isLoading }: PostsProps) {
   if (isLoading) {
     return (
       <>
@@ -17,8 +20,8 @@ function Posts() {
   }
   return (
     <div className="w-full flex flex-col">
-      {feedPosts && feedPosts.length > 0 ? (
-        feedPosts.map((post) => <Post key={post.id} post={post} />)
+      {posts && posts.length > 0 ? (
+        posts.map((post) => <Post key={post.id} post={post} />)
       ) : (
         <div className="flex flex-col items-center justify-center py-16 opacity-70">
           <HiOutlineInbox className="w-16 h-16 text-gray-400 mb-4" />

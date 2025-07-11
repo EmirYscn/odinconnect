@@ -24,7 +24,7 @@ const variationClasses: Record<
   login:
     "rounded-md bg-[var(--color-brand-100)] text-white hover:text-brand-600",
   logout: "rounded-md hover:text-brand-600",
-  post: "!rounded-full bg-[var(--color-brand-100)] text-white",
+  post: "!rounded-full bg-[var(--color-brand-100)]/80  text-white",
   text: "bg-transparent !p-0 hover:underline !text-[var(--color-grey-800)]/50",
 };
 

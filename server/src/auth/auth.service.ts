@@ -15,6 +15,8 @@ import { ConfigType } from '@nestjs/config';
 import { ActiveUserType } from 'src/common/interfaces/user.interface';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { JwtObject } from 'src/common/types/jwt';
+import { Profile as GoogleProfile } from 'passport-google-oauth20';
+import { Profile as GithubProfile } from 'passport-github2';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +24,7 @@ export class AuthService {
     @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly hashingProvider: HashingProvider, // Assuming you have a hashing provider
+    private readonly hashingProvider: HashingProvider,
     @Inject(authConfig.KEY)
     private readonly authConfiguration: ConfigType<typeof authConfig>,
   ) {}
@@ -45,18 +47,40 @@ export class AuthService {
     return userWithoutPassword;
   }
 
+  async validateOAuthUser(details: GoogleProfile | GithubProfile) {
+    const email = details.emails?.[0].value as string;
+    const existingUser = await this.usersService.getUserByEmail(email);
+    if (existingUser) {
+      const { password: _, ...userWithoutPassword } = existingUser;
+      return userWithoutPassword;
+    }
+
+    const baseUsername =
+      details.username ||
+      details.displayName?.split(' ').join('').toLowerCase() ||
+      email.split('@')[0];
+
+    const username =
+      await this.usersService.generateUniqueUsername(baseUsername);
+
+    const newUserData = {
+      email,
+      displayName: details.displayName,
+      username: username,
+      avatar: details.photos?.[0]?.value,
+    };
+    const newUser = await this.usersService.createUser(newUserData, false);
+    const { password: _, ...userWithoutPassword } = newUser;
+    return userWithoutPassword;
+  }
+
   async login(user: User) {
     const { accessToken, refreshToken } = await this.generateToken(user);
 
     return {
       accessToken,
       refreshToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        avatar: user.avatar,
-      },
+      user,
     };
   }
 

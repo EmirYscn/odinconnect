@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { EventsGateway } from 'src/events/events.gateway';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,7 +13,7 @@ export class PostsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly eventsGateway: EventsGateway,
-    private readonly usersService: UsersService, // Assuming you have a UsersService for user-related operations
+    private readonly usersService: UsersService,
   ) {}
 
   async createPost(userId: string, data: Prisma.PostCreateWithoutUserInput) {
@@ -30,7 +34,7 @@ export class PostsService {
     return createdPost;
   }
 
-  getFeedPosts() {
+  getForYouPosts() {
     return this.prisma.post.findMany({
       where: {
         published: true,
@@ -102,8 +106,42 @@ export class PostsService {
     });
   }
 
+  async getUserPosts(userId: string) {
+    // Validate user exists
+    const user = await this.usersService.getUserById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return this.prisma.post.findMany({
+      where: {
+        userId: user.id,
+        published: true,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            avatar: true,
+            profile: true,
+          },
+        },
+        medias: {
+          select: {
+            id: true,
+            url: true,
+            type: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
   async getPostById(id: string) {
-    return this.prisma.post.findUnique({
+    const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
         user: {
@@ -123,5 +161,11 @@ export class PostsService {
         },
       },
     });
+
+    if (!post) {
+      throw new BadRequestException('Post not found');
+    }
+
+    return post;
   }
 }

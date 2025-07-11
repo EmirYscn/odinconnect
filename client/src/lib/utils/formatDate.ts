@@ -19,3 +19,7 @@ export function formatDateToHour(date: Date | string): string {
 
   return formattedDate;
 }
+
+export function formatJoinedDate(date: Date | string): string {
+  return format(date, "MMM yyyy");
+}

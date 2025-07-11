@@ -12,6 +12,7 @@ import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { EventsGateway } from './events/events.gateway';
 import { EventsModule } from './events/events.module';
+import { ProfileModule } from './profile/profile.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -19,6 +20,7 @@ const ENV = process.env.NODE_ENV;
   imports: [
     PrismaModule,
     UsersModule,
+    ProfileModule,
     PostsModule,
     AuthModule,
     EventsModule,
@@ -38,6 +40,7 @@ const ENV = process.env.NODE_ENV;
       validationSchema: envValidator,
     }),
     EventsModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [

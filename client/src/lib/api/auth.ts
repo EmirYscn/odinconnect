@@ -25,6 +25,24 @@ export const getCurrentUser = async (): Promise<User> => {
   }
 };
 
+export type SignupDataType = {
+  email: string;
+  username: string;
+  password: string;
+};
+
+export const signup = async (signupData: SignupDataType) => {
+  try {
+    const res = await api.post("/auth/signup", signupData);
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Login failed");
+    }
+    throw error;
+  }
+};
+
 export const login = async (email: string, password: string): Promise<User> => {
   try {
     const res = await bareApi.post("/auth/login", { email, password });

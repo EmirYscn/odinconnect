@@ -10,6 +10,8 @@ import { BcryptProvider } from './provider/bcrypt.provider';
 import { HashingProvider } from './provider/hashing.provider';
 import { ConfigModule } from '@nestjs/config';
 import authConfig from './config/auth.config';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { GithubStrategy } from './strategies/github.strategy';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import authConfig from './config/auth.config';
   providers: [
     AuthService,
     LocalStrategy,
+    GoogleStrategy,
+    GithubStrategy,
     JwtStrategy,
     {
       provide: HashingProvider,

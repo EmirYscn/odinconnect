@@ -7,8 +7,14 @@ import Button from "./Button";
 import { MAX_POST_CONTENT_LENGTH } from "@/lib/utils/constants";
 import { useRouter } from "next/navigation";
 import ProfileImage from "./ProfileImage";
+import PostSkeleton from "./PostSkeleton";
 
-function Post({ post }: { post: PostType }) {
+type PostProps = {
+  post: PostType;
+  isLoading?: boolean;
+};
+
+function Post({ post, isLoading }: PostProps) {
   const [showFull, setShowFull] = useState(false);
   const router = useRouter();
 
@@ -17,16 +23,19 @@ function Post({ post }: { post: PostType }) {
     ? post.content
     : post.content.slice(0, MAX_POST_CONTENT_LENGTH);
 
+  if (isLoading) {
+    return <PostSkeleton />;
+  }
+
   return (
     <div
       onClick={() => router.push(`/posts/${post.id}`)}
       className="flex gap-4 p-8 rounded-2xl mt-2 shadow-sm bg-[var(--color-grey-50)]/20 border-r border-b border-[var(--color-grey-300)]/80 w-full cursor-pointer"
     >
-      {/* <PostHeader post={post} /> */}
-      <div className="">
+      <div>
         <ProfileImage size="sm" />
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full">
         <PostHeader post={post} />
         <p className="break-words">
           {displayedContent}

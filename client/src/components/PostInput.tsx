@@ -34,11 +34,11 @@ function PostInput() {
 
   return (
     <div className="flex flex-col w-full p-4 gap-4 shadow-sm rounded-2xl bg-[var(--color-grey-50)]/20">
-      <div className="flex items-center">
+      <div className="flex items-center ">
         <Button
           onClick={handleButtonClick}
           icon={<MdOutlineAttachFile />}
-          className="text-xl !py-0"
+          className="text-xl py-0 hover:bg-[var(--color-brand-100)]/30 transition-all duration-300 ease-in-out rounded-lg"
         />
         <input type="file" ref={fileInputRef} className="hidden" multiple />
         <TextareaAutosize
@@ -56,6 +56,7 @@ function PostInput() {
           iconEnd={true}
           onClick={handleCreatePost}
           disabled={isPending}
+          className="hover:bg-[var(--color-brand-100)] transition-all duration-300 ease-in-out"
         >
           Post
         </Button>

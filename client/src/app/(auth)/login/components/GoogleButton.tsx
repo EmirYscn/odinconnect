@@ -35,7 +35,7 @@ function GoogleButton() {
   const handleGoogleLogin = () => {
     const currentUrl = window.location.origin;
     const redirectUrl = encodeURIComponent(currentUrl);
-    window.location.href = `${API_BASE_URL}/api/v1/auth/google/?redirect=${redirectUrl}`;
+    window.location.href = `${API_BASE_URL}/auth/google/login/?redirect=${redirectUrl}`;
   };
 
   return (

@@ -29,6 +29,7 @@ model Profile {
 model User {
   id       String  @id @default(uuid())
   email    String  @unique
+  displayName String? // User's display name
   username String  @unique
   password String?
   avatar   String? // Direct URL to avatar image
@@ -41,6 +42,9 @@ model User {
   resetPasswordExpires DateTime? // Expiration date for the token
 
   posts   Post[] // One-to-many relationship with Post
+  likes   Like[] // One-to-many relationship with Like
+  comments Comment[] // One-to-many relationship with Comment
+  medias  Media[] // One-to-many relationship with Media
   profile Profile? // One-to-one relationship with Profile
 
   // Relations
@@ -106,6 +110,44 @@ model Post {
   userId String
 
   medias Media[] // One-to-many relationship with Media
+  comments Comment[] // One-to-many relationship with Comment
+  likes   Like[] // One-to-many relationship with Like
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String?
+
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String?
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+
+  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId  String?
+
+  replies   Comment[] @relation("CommentReplies")
+  likes     Like[]
 }
 
 model Media {
@@ -118,4 +160,7 @@ model Media {
 
   post   Post   @relation(fields: [postId], references: [id])
   postId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }

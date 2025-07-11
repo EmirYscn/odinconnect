@@ -7,7 +7,7 @@ export const useCreatePost = () => {
   const { mutate: createPost, isPending } = useMutation({
     mutationFn: createPostApi,
     onSuccess: () => {
-      toast.success("Post successfully created!");
+      toast.success("Post created successfully!");
       queryClient.invalidateQueries({
         queryKey: ["posts"],
         exact: false,

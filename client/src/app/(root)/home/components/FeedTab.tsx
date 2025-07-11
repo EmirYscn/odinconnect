@@ -1,16 +1,15 @@
-import { useState } from "react";
+export type FeedTabContext = "foryou" | "following";
 
-function FeedTab() {
-  const [context, setContext] = useState<"foryou" | "following">("foryou");
+type FeedTabProps = {
+  context: FeedTabContext;
+  setContext: React.Dispatch<React.SetStateAction<FeedTabContext>>;
+};
 
-  const handleTabClick = (tab: "foryou" | "following") => {
-    setContext(tab);
-  };
-
+function FeedTab({ context, setContext }: FeedTabProps) {
   return (
     <div className="flex justify-center w-full sticky top-0 z-10 cursor-pointer mb-3 shadow-md backdrop-blur-md rounded-xl">
       <div
-        onClick={() => handleTabClick("foryou")}
+        onClick={() => setContext("foryou")}
         className={`text-center w-full py-4 px-6 border-b ${
           context === "foryou"
             ? "border-b-4 border-[var(--color-brand-100)]"
@@ -20,7 +19,7 @@ function FeedTab() {
         <span>For you</span>
       </div>
       <div
-        onClick={() => handleTabClick("following")}
+        onClick={() => setContext("following")}
         className={`text-center w-full py-4 px-6 border-b ${
           context === "following"
             ? "border-b-4 border-[var(--color-brand-100)]"

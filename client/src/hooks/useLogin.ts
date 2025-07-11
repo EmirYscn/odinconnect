@@ -17,7 +17,7 @@ export const useLogin = () => {
     }) => loginApi(email, password),
     onSuccess: (user) => {
       queryClient.setQueryData([USER_QUERY_KEY], user);
-      router.push("/home");
+      router.replace("/home");
     },
     onError: (err) => {
       toast.error(err.message);

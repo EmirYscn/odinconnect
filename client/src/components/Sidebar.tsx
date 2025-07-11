@@ -15,6 +15,7 @@ import { useRef } from "react";
 import { IoIosLogOut } from "react-icons/io";
 import { useDarkMode } from "@/contexts/DarkMode/ThemeContextProvider";
 import { useLogout } from "@/hooks/useLogout";
+import { useUser } from "@/hooks/useUser";
 
 type SidebarItem = {
   name: string;
@@ -23,44 +24,45 @@ type SidebarItem = {
   class?: string;
 };
 
-const sidebarItems: SidebarItem[] = [
-  {
-    name: "Home",
-    icon: <RiHomeLine />,
-    href: "/",
-  },
-  {
-    name: "Explore",
-    icon: <IoSearch />,
-    href: "/explore",
-  },
-  {
-    name: "Notifications",
-    icon: <RiNotification3Line />,
-    href: "/notifications",
-  },
-  {
-    name: "Messages",
-    icon: <MdOutlineMail />,
-    href: "/messages",
-  },
-  {
-    name: "Profile",
-    icon: <FaRegUser />,
-    href: "/profile",
-    class: "hidden md:flex",
-  },
-  {
-    name: "Settings",
-    icon: <IoSettingsOutline />,
-    href: "/settings",
-  },
-];
-
 function Sidebar() {
   const profileRef = useRef<HTMLDivElement>(null);
   const { isDarkMode, toggleDarkMode } = useDarkMode();
   const { logout, isPending } = useLogout();
+  const { user } = useUser();
+
+  const sidebarItems: SidebarItem[] = [
+    {
+      name: "Home",
+      icon: <RiHomeLine />,
+      href: "/",
+    },
+    {
+      name: "Explore",
+      icon: <IoSearch />,
+      href: "/explore",
+    },
+    {
+      name: "Notifications",
+      icon: <RiNotification3Line />,
+      href: "/notifications",
+    },
+    {
+      name: "Messages",
+      icon: <MdOutlineMail />,
+      href: "https://messaging-app-neon-alpha.vercel.app/",
+    },
+    {
+      name: "Profile",
+      icon: <FaRegUser />,
+      href: `/profile/${user?.profile?.id}`,
+      class: "hidden md:flex",
+    },
+    {
+      name: "Settings",
+      icon: <IoSettingsOutline />,
+      href: "/settings",
+    },
+  ];
   return (
     <div className="flex h-full md:flex-col gap-4 md:py-2 px-4 justify-center md:justify-normal">
       <div className="hidden md:flex items-center gap-2 p-2 ">
@@ -96,15 +98,15 @@ function Sidebar() {
           >
             <div
               ref={profileRef}
-              className="hidden items-center gap-4 px-4 py-2 md:flex shadow-lg rounded-full hover:bg-[var(--color-grey-100)]/30 cursor-pointer transition-all duration-200 ease-in-out"
+              className="hidden items-center gap-4 px-4 py-4 md:flex shadow-lg rounded-full hover:bg-[var(--color-grey-100)]/30 cursor-pointer transition-all duration-200 ease-in-out"
               id="sidebarProfile"
             >
               <div className="flex w-full lg:w-auto justify-center lg:justify-start">
-                <ProfileImage size="xs" />
+                <ProfileImage size="xs" imgSrc={user?.avatar} />
               </div>
               <div className="hidden flex-col lg:flex text-start">
-                <span className="font-semibold">User</span>
-                <span className="">User Role</span>
+                <span className="font-semibold">{user?.displayName}</span>
+                <span className="">@{user?.username}</span>
               </div>
               <span className="hidden lg:flex ml-auto">
                 <BsThreeDots />
